@@ -7,7 +7,7 @@ pluginManagement {
     }
     
 }
-rootProject.name = "MyApplication"
+rootProject.name = "ChanBrowser"
 
 
 include(":androidApp")
