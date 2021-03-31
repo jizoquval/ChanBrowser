@@ -4,11 +4,22 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("com.squareup.sqldelight")
-    kotlin("plugin.serialization") version "1.4.30"
+    kotlin("plugin.serialization") version Versions.kotlin
+}
+
+// todo remove workaround after update kmm plugin to 1.5.5
+android {
+    configurations {
+        create("androidTestApi")
+        create("androidTestDebugApi")
+        create("androidTestReleaseApi")
+        create("testApi")
+        create("testDebugApi")
+        create("testReleaseApi")
+    }
 }
 
 kotlin {
-    android()
     ios {
         binaries {
             framework {
@@ -16,17 +27,30 @@ kotlin {
             }
         }
     }
-    val sqlDelight = "1.4.4"
-    val ktor = "1.5.1"
+    android {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:runtime:$sqlDelight")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
-                implementation("io.ktor:ktor-client-core:$ktor")
-                implementation("io.ktor:ktor-client-serialization:$ktor")
-                implementation("io.ktor:ktor-client-logging:$ktor")
+                implementation(SqlDelight.runtime)
+                implementation(SqlDelight.coroutinesExtensions)
+                implementation(Coroutines.core)
+                implementation(Serialization.core)
+                implementation(Ktor.core)
+                implementation(Ktor.serialization)
+                implementation(Ktor.logger)
+                implementation(Ktor.loggerLogback)
+                implementation(Koin.core)
+                implementation(Mvi.core)
+                implementation(Mvi.defaultStorageFactory)
+                implementation(Mvi.coroutineExt)
+                implementation(Mvi.rx)
             }
         }
         val commonTest by getting {
@@ -37,38 +61,42 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:android-driver:$sqlDelight")
-                implementation("io.ktor:ktor-client-android:$ktor")
+                implementation(Jetpack.ViewModel.compose)
+                implementation(SqlDelight.androidDriver)
+                implementation(Ktor.android)
             }
         }
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13")
+                implementation(Test.junit)
             }
         }
         val iosMain by getting {
             dependencies {
-                implementation("com.squareup.sqldelight:native-driver:$sqlDelight")
-                implementation("io.ktor:ktor-client-ios:$ktor")
+                implementation(SqlDelight.nativeDriver)
+                implementation(Ktor.ios)
             }
         }
-        val iosTest by getting
     }
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(Versions.compile)
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
+        minSdkVersion(Versions.minSdk)
+        targetSdkVersion(Versions.targetSdk)
     }
 }
 
 sqldelight {
     database("AppDatabase") {
-        packageName = "com.ninjaval.dvachBrowser.shared.cache"
+        packageName = "com.jizoquval.chanBrowser.shared.cache"
     }
 }
 

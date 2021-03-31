@@ -1,0 +1,21 @@
+import com.jizoquval.chanBrowser.shared.cache.models.Chan;
+
+CREATE TABLE Board (
+    id TEXT NOT NULL,
+    chan TEXT as Chan NOT NULL,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    defaultName TEXT NOT NULL,
+    isFavorite INTEGER AS Boolean NOT NULL DEFAULT 0,
+    PRIMARY KEY(chan, id)
+);
+
+putBoard:
+INSERT OR REPLACE INTO Board (chan, id, defaultName, name, category, isFavorite)
+VALUES (?, ?, ?, ?, ?, COALESCE((SELECT isFavorite FROM Board WHERE id = id AND chan = chan), 0));
+
+selectAllForChan:
+SELECT * FROM Board WHERE chan = ?;
+
+deleteBoard:
+DELETE FROM Board WHERE chan = ? AND id = ?;
