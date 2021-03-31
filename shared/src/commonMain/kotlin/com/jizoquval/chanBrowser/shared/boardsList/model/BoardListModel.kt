@@ -1,6 +1,5 @@
 package com.jizoquval.chanBrowser.shared.boardsList.model
 
-
 data class BoardListModel(
     val chan: String,
     val categories: Map<String, List<Board>>,

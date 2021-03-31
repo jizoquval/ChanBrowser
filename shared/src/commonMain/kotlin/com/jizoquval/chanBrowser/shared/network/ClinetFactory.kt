@@ -1,13 +1,21 @@
 package com.jizoquval.chanBrowser.shared.network
 
-import com.jizoquval.chanBrowser.shared.logger.log
-import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
-import io.ktor.http.*
 import com.jizoquval.chanBrowser.shared.logger.LogLevel.ERROR
+import com.jizoquval.chanBrowser.shared.logger.log
+import io.ktor.client.HttpClient
+import io.ktor.client.features.ClientRequestException
+import io.ktor.client.features.HttpResponseValidator
+import io.ktor.client.features.RedirectResponseException
+import io.ktor.client.features.ResponseException
+import io.ktor.client.features.ServerResponseException
+import io.ktor.client.features.defaultRequest
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.logging.DEFAULT
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
+import io.ktor.http.URLProtocol
 
 enum class Endpoint(
     val url: String

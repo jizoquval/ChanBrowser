@@ -2,8 +2,9 @@ package com.jizoquval.chanBrowser.shared.network.dvach
 
 import com.jizoquval.chanBrowser.shared.network.json.BoardJson
 import com.jizoquval.chanBrowser.shared.network.json.ThreadsListJson
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -25,15 +26,14 @@ internal class DvachApi(
         }
 
     override suspend fun getThreads(boardName: String): ThreadsListJson =
-      withContext(backgroundDispatcher) {
-          httpClient.get {
-              url {
-                  encodedPath = "$boardName/catalog.json"
-              }
-          }
-      }
+        withContext(backgroundDispatcher) {
+            httpClient.get {
+                url {
+                    encodedPath = "$boardName/catalog.json"
+                }
+            }
+        }
 
     internal fun getPosts() {
-
     }
 }

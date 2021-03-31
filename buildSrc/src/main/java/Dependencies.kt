@@ -10,6 +10,11 @@ object Versions {
     const val gradlePlugin = "com.android.tools.build:gradle:$gradleVersion"
 }
 
+object KtLint {
+    const val version = "10.0.0"
+    const val plugin = "org.jlleitschuh.gradle.ktlint"
+}
+
 object Ktor {
     private const val version = "1.5.1"
 
@@ -95,5 +100,5 @@ object Test {
 object Coil {
     private const val version = "0.7.0"
 
-    const val core =  "com.google.accompanist:accompanist-coil:$version"
+    const val core = "com.google.accompanist:accompanist-coil:$version"
 }

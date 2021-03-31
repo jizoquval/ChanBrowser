@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
-open class BaseViewModel<Model : Any, Event : Any, in Intent : Any, in State : Any, Label: Any>(
+open class BaseViewModel<Model : Any, Event : Any, in Intent : Any, in State : Any, Label : Any>(
     private val store: Store<Intent, State, Label>,
     private val stateMapper: State.() -> Model,
     private val intentMapper: Event.() -> Intent

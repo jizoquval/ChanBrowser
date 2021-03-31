@@ -5,6 +5,7 @@ plugins {
     id("com.android.library")
     id("com.squareup.sqldelight")
     kotlin("plugin.serialization") version Versions.kotlin
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 // todo remove workaround after update kmm plugin to 1.5.5

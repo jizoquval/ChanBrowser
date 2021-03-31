@@ -9,17 +9,17 @@ fun postFromThreadJson(
     chan: Chan,
     json: ThreadJson
 ) = Post(
-        id = json.id,
-        threadId = json.id,
-        chan = chan,
-        title = json.subject,
-        message = json.comment,
-        date = json.date,
-        timestamp = json.timestamp,
-        isOP = json.op.toBoolean(),
-        isStiky = json.isSticky,
-        name = json.authorName,
-        email = json.authorEmail,
-        likes = json.likes,
-        dislikes = json.dislikes
-    )
+    id = json.id,
+    threadId = json.id,
+    chan = chan,
+    title = json.subject,
+    message = json.comment,
+    date = json.date,
+    timestamp = json.timestamp,
+    isOP = json.op.toBoolean(),
+    isStiky = json.isSticky,
+    name = json.authorName,
+    email = json.authorEmail,
+    likes = json.likes,
+    dislikes = json.dislikes
+)

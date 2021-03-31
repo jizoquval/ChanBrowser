@@ -20,7 +20,6 @@ fun initIOSKoin(logger: ILogger): KoinApplication =
         }
     )
 
-
 actual val platformModule: Module = module {
     single<SqlDriver> { NativeSqliteDriver(AppDatabase.Schema, "App.db") }
 }

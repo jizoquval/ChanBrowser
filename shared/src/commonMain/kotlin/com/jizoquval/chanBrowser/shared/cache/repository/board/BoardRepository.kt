@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flowOn
 class BoardRepository(
     private val database: AppDatabase,
     private val backgroundDispatcher: CoroutineDispatcher
-): IBoardRepository {
+) : IBoardRepository {
 
     private val dbQuery = database.boardQueries
 

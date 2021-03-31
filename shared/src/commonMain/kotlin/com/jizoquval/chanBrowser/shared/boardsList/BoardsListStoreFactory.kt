@@ -8,14 +8,9 @@ import com.arkivanov.mvikotlin.extensions.coroutines.SuspendExecutor
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
 import com.jizoquval.chanBrowser.shared.cache.repository.board.IBoardRepository
-import com.jizoquval.chanBrowser.shared.logger.LogLevel
 import com.jizoquval.chanBrowser.shared.logger.log
 import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
-import io.ktor.client.features.*
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -31,11 +26,12 @@ class BoardsListStoreFactory(private val storeFactory: StoreFactory) : KoinCompo
 
     private sealed class Result {
         class BoardsList(val boards: List<Board>) : Result()
-        class Error(val message: String = "No Internet"): Result()
+        class Error(val message: String = "No Internet") : Result()
     }
 
     fun create(): BoardsListStore =
-        object : BoardsListStore,
+        object :
+            BoardsListStore,
             Store<BoardsListStore.Intent, BoardsListStore.State, BoardsListStore.Label> by storeFactory.create(
                 name = "BoardsListStore",
                 initialState = BoardsListStore.State(
@@ -51,10 +47,10 @@ class BoardsListStoreFactory(private val storeFactory: StoreFactory) : KoinCompo
 
     private inner class ExecutorImpl :
         SuspendExecutor<BoardsListStore.Intent,
-                Action,
-                BoardsListStore.State,
-                Result,
-                BoardsListStore.Label>() {
+            Action,
+            BoardsListStore.State,
+            Result,
+            BoardsListStore.Label>() {
 
         override suspend fun executeAction(action: Action, getState: () -> BoardsListStore.State) =
             when (action) {

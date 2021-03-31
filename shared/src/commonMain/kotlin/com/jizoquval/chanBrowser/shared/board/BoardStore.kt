@@ -2,11 +2,11 @@ package com.jizoquval.chanBrowser.shared.board
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.jizoquval.chanBrowser.shared.board.BoardStore.Intent
-import com.jizoquval.chanBrowser.shared.board.BoardStore.State
 import com.jizoquval.chanBrowser.shared.board.BoardStore.Label
+import com.jizoquval.chanBrowser.shared.board.BoardStore.State
 import com.jizoquval.chanBrowser.shared.cache.ThreadPost
 
-interface BoardStore: Store<Intent, State, Label> {
+interface BoardStore : Store<Intent, State, Label> {
 
     sealed class Intent {
         class SelectThread(val id: String) : Intent()
