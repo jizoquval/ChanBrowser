@@ -4,7 +4,7 @@ object Versions {
     const val targetSdk = 30
     const val kotlin = "1.4.31"
 
-    private const val gradleVersion = "7.0.0-alpha07"
+    private const val gradleVersion = "7.0.0-alpha12"
 
     const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
     const val gradlePlugin = "com.android.tools.build:gradle:$gradleVersion"
