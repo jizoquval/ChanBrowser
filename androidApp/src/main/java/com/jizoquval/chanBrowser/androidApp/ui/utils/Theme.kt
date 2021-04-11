@@ -22,8 +22,8 @@ private val DarkColorPalette = darkColors(
 
     surface = ashGray,
     onSurface = lightGray
-    //surface = darkGrayBG,
-   // background = darkGrayBG,
+    // surface = darkGrayBG,
+    // background = darkGrayBG,
 )
 
 private val LightColorPalette = lightColors(
@@ -40,7 +40,7 @@ fun BaseAppTheme(
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) DarkColorPalette else LightColorPalette
-   // val typography = if (darkTheme) DarkPalletTypografy else LightPalletTypografy
+    // val typography = if (darkTheme) DarkPalletTypografy else LightPalletTypografy
     MaterialTheme(
         colors = colors,
         typography = Typografy,

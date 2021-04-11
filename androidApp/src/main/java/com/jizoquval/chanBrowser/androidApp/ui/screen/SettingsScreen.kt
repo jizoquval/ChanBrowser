@@ -6,6 +6,5 @@ import androidx.compose.runtime.Composable
 @Composable
 fun SettingsScreen(pressUp: () -> Unit) {
     Scaffold() {
-
     }
 }

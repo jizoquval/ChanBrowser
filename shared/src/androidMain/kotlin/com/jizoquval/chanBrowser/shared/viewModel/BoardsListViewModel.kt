@@ -9,7 +9,7 @@ import com.jizoquval.chanBrowser.shared.boardsList.model.stateToModel
 class BoardsListViewModel(
     store: BoardsListStore
 ) : BaseViewModel<BoardListModel, BoardListEvent, BoardsListStore.Intent,
-        BoardsListStore.State, BoardsListStore.Label>(
+    BoardsListStore.State, BoardsListStore.Label>(
     store = store,
     stateMapper = ::stateToModel,
     intentMapper = ::eventToIntent

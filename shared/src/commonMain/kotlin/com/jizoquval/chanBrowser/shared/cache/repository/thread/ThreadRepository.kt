@@ -1,12 +1,12 @@
 package com.jizoquval.chanBrowser.shared.cache.repository.thread
 
+import co.touchlab.kermit.Kermit
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Thread
 import com.jizoquval.chanBrowser.shared.cache.ThreadPost
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
 import com.jizoquval.chanBrowser.shared.cache.repository.post.postFromThreadJson
 import com.jizoquval.chanBrowser.shared.cache.transactionWithContext
-import com.jizoquval.chanBrowser.shared.logger.log
 import com.jizoquval.chanBrowser.shared.network.json.ThreadsListJson
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class ThreadRepository(
     database: AppDatabase,
+    private val logger: Kermit,
     private val backgroundDispatcher: CoroutineDispatcher
 ) : IThreadRepository {
 
@@ -26,7 +27,7 @@ class ThreadRepository(
         val postMaxLength = threadJson.lengthOfMessage
         threadQueries.transactionWithContext(backgroundDispatcher) {
             afterCommit {
-                log("Insert ${threadJson.threads.size} threads to database")
+                logger.d { "Insert ${threadJson.threads.size} threads to database" }
             }
             threadJson.threads.map { json ->
                 threadFromJson(

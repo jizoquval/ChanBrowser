@@ -1,13 +1,19 @@
 package com.jizoquval.chanBrowser.shared.network
 
-import com.jizoquval.chanBrowser.shared.logger.log
-import io.ktor.client.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
-import io.ktor.client.features.logging.*
-import io.ktor.http.*
-import com.jizoquval.chanBrowser.shared.logger.LogLevel.ERROR
+import co.touchlab.kermit.Kermit
+import io.ktor.client.HttpClient
+import io.ktor.client.features.ClientRequestException
+import io.ktor.client.features.HttpResponseValidator
+import io.ktor.client.features.RedirectResponseException
+import io.ktor.client.features.ResponseException
+import io.ktor.client.features.ServerResponseException
+import io.ktor.client.features.defaultRequest
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
+import io.ktor.http.URLProtocol
 
 enum class Endpoint(
     val url: String
@@ -17,7 +23,10 @@ enum class Endpoint(
 
 object NetworkException : RuntimeException()
 
-fun createHttpClient(endpoint: Endpoint) = HttpClient {
+fun createHttpClient(
+    endpoint: Endpoint,
+    log: Kermit
+) = HttpClient {
     install(JsonFeature) {
         val json = kotlinx.serialization.json.Json {
             ignoreUnknownKeys = true
@@ -25,7 +34,12 @@ fun createHttpClient(endpoint: Endpoint) = HttpClient {
         serializer = KotlinxSerializer(json)
     }
     install(Logging) {
-        logger = Logger.DEFAULT
+        logger = object : Logger {
+            override fun log(message: String) {
+                log.i { message }
+            }
+        }
+
         level = LogLevel.INFO
     }
     HttpResponseValidator {
@@ -51,7 +65,7 @@ fun createHttpClient(endpoint: Endpoint) = HttpClient {
             }
         }
         handleResponseException { cause: Throwable ->
-            log(ERROR, "client got exception", cause)
+            log.e(cause) { "client got exception" }
             throw NetworkException
         }
     }

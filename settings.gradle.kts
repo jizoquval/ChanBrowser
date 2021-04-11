@@ -5,11 +5,8 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-    
 }
 rootProject.name = "ChanBrowser"
 
-
 include(":androidApp")
 include(":shared")
-

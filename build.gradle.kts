@@ -11,10 +11,22 @@ buildscript {
     }
 }
 
+plugins {
+    id(KtLint.plugin) version KtLint.version
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
         jcenter()
+    }
+}
+
+ktlint {
+    verbose.set(true)
+    outputToConsole.set(true)
+    filter {
+        exclude("**/generated/**")
     }
 }

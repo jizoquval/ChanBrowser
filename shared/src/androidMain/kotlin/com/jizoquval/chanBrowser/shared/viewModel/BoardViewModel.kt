@@ -6,7 +6,7 @@ import com.jizoquval.chanBrowser.shared.board.uiModel.stateToModel
 
 class BoardViewModel(
     store: BoardStore
-):BaseViewModel<BoardModel, Any, BoardStore.Intent, BoardStore.State, BoardStore.Label>(
+) : BaseViewModel<BoardModel, Any, BoardStore.Intent, BoardStore.State, BoardStore.Label>(
     store = store,
     stateMapper = ::stateToModel,
     intentMapper = {

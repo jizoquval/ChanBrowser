@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 dependencies {
@@ -15,7 +16,6 @@ dependencies {
 
     implementation(Coil.core)
 
-    implementation(Koin.core)
     implementation(Koin.viewModel)
     implementation(Koin.compose)
 
