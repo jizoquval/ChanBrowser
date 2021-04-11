@@ -4,7 +4,6 @@ import co.touchlab.kermit.Kermit
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
-
 import com.jizoquval.chanBrowser.shared.cache.transactionWithContext
 import com.jizoquval.chanBrowser.shared.network.json.BoardJson
 import com.squareup.sqldelight.runtime.coroutines.asFlow

@@ -26,4 +26,7 @@ allprojects {
 ktlint {
     verbose.set(true)
     outputToConsole.set(true)
+    filter {
+        exclude("**/generated/**")
+    }
 }

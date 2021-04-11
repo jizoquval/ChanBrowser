@@ -48,10 +48,10 @@ class BoardsListStoreFactory(
 
     private inner class ExecutorImpl :
         SuspendExecutor<BoardsListStore.Intent,
-                Action,
-                BoardsListStore.State,
-                Result,
-                BoardsListStore.Label>() {
+            Action,
+            BoardsListStore.State,
+            Result,
+            BoardsListStore.Label>() {
 
         override suspend fun executeAction(action: Action, getState: () -> BoardsListStore.State) =
             when (action) {
