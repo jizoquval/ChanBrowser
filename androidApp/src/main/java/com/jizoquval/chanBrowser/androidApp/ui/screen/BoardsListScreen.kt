@@ -1,6 +1,5 @@
 package com.jizoquval.chanBrowser.androidApp.ui.screen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
