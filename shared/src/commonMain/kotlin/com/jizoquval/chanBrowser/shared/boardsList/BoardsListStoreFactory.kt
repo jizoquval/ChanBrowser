@@ -1,5 +1,6 @@
 package com.jizoquval.chanBrowser.shared.boardsList
 
+import co.touchlab.kermit.Kermit
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -8,16 +9,16 @@ import com.arkivanov.mvikotlin.extensions.coroutines.SuspendExecutor
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
 import com.jizoquval.chanBrowser.shared.cache.repository.board.IBoardRepository
-import com.jizoquval.chanBrowser.shared.logger.log
 import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
 import kotlinx.coroutines.flow.collect
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class BoardsListStoreFactory(private val storeFactory: StoreFactory) : KoinComponent {
-
-    private val api: IDvachApi by inject()
-    private val db: IBoardRepository by inject()
+class BoardsListStoreFactory(
+    private val storeFactory: StoreFactory,
+    private val api: IDvachApi,
+    private val db: IBoardRepository,
+    private val logger: Kermit
+) : KoinComponent {
 
     private sealed class Action {
         object SubscribeToBoards : Action()
@@ -47,10 +48,10 @@ class BoardsListStoreFactory(private val storeFactory: StoreFactory) : KoinCompo
 
     private inner class ExecutorImpl :
         SuspendExecutor<BoardsListStore.Intent,
-            Action,
-            BoardsListStore.State,
-            Result,
-            BoardsListStore.Label>() {
+                Action,
+                BoardsListStore.State,
+                Result,
+                BoardsListStore.Label>() {
 
         override suspend fun executeAction(action: Action, getState: () -> BoardsListStore.State) =
             when (action) {
@@ -67,14 +68,14 @@ class BoardsListStoreFactory(private val storeFactory: StoreFactory) : KoinCompo
             getState: () -> BoardsListStore.State
         ) = when (intent) {
             is BoardsListStore.Intent.SelectFavorite -> {
-                log("Favorite board selected: ${intent.id}")
+                logger.d { "Favorite board selected: ${intent.id}" }
             }
             is BoardsListStore.Intent.BoardSelected -> {
-                log("Board selected: ${intent.id}")
+                logger.d { "Board selected: ${intent.id}" }
                 publish(BoardsListStore.Label.NavigateToThread(boardId = intent.id))
             }
             is BoardsListStore.Intent.SettingsSelected -> {
-                log("Settings clicked")
+                logger.d { "Settings clicked" }
                 publish(BoardsListStore.Label.NavigateToSettings)
             }
         }

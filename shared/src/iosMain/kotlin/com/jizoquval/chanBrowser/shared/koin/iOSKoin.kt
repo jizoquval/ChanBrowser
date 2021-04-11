@@ -1,7 +1,10 @@
 package com.jizoquval.chanBrowser.shared.koin
 
+import co.touchlab.kermit.Kermit
+import co.touchlab.kermit.NSLogLogger
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
-import com.jizoquval.chanBrowser.shared.logger.ILogger
+import com.russhwolf.settings.AppleSettings
+import com.russhwolf.settings.Settings
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 import kotlinx.cinterop.ObjCClass
@@ -12,16 +15,22 @@ import org.koin.core.module.Module
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.Qualifier
 import org.koin.dsl.module
+import platform.Foundation.NSUserDefaults
 
-fun initIOSKoin(logger: ILogger): KoinApplication =
+fun initIOSKoin(
+    userDefaults: NSUserDefaults,
+): KoinApplication =
     initKoin(
         module {
-            single { logger }
+            single<Settings> { AppleSettings(userDefaults) }
         }
     )
 
 actual val platformModule: Module = module {
     single<SqlDriver> { NativeSqliteDriver(AppDatabase.Schema, "App.db") }
+
+    val baseKermit = Kermit(NSLogLogger()).withTag("ChanBrowser")
+    factory { (tag: String?) -> if (tag != null) baseKermit.withTag(tag) else baseKermit }
 }
 
 fun Koin.get(objCClass: ObjCClass, qualifier: Qualifier?, parameter: Any): Any {

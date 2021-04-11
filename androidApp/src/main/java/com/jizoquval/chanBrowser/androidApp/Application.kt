@@ -2,9 +2,8 @@ package com.jizoquval.chanBrowser.androidApp
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
+import android.content.SharedPreferences
 import com.jizoquval.chanBrowser.shared.koin.initKoin
-import com.jizoquval.chanBrowser.shared.logger.ILogger
 import com.jizoquval.chanBrowser.shared.viewModel.BoardViewModel
 import com.jizoquval.chanBrowser.shared.viewModel.BoardsListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -18,8 +17,8 @@ class BoardsApp : Application() {
         initKoin(
             appModule = module {
                 single<Context> { this@BoardsApp }
-                single {
-                    ILogger { message -> Log.d("[Shared]", message) }
+                single<SharedPreferences> {
+                    get<Context>().getSharedPreferences("BOARDS_BROWSER_SETTINGS", Context.MODE_PRIVATE)
                 }
                 viewModel {
                     BoardsListViewModel(get())

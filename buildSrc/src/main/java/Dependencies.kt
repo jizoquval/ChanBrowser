@@ -4,7 +4,7 @@ object Versions {
     const val targetSdk = 30
     const val kotlin = "1.4.31"
 
-    private const val gradleVersion = "7.0.0-alpha12"
+    private const val gradleVersion = "7.0.0-alpha13"
 
     const val kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin"
     const val gradlePlugin = "com.android.tools.build:gradle:$gradleVersion"
@@ -23,7 +23,6 @@ object Ktor {
     const val logger = "io.ktor:ktor-client-logging:$version"
     const val android = "io.ktor:ktor-client-android:$version"
     const val ios = "io.ktor:ktor-client-ios:$version"
-    const val loggerLogback = "ch.qos.logback:logback-classic:1.2.3"
 }
 
 object Koin {
@@ -70,11 +69,23 @@ object Mvi {
     const val rx = "com.arkivanov.mvikotlin:rx:$version"
 }
 
+// Logger
+object Kermit {
+    private const val version = "0.1.8"
+    const val core = "co.touchlab:kermit:$version"
+}
+
+object PlatformSettings {
+    private const val version = "0.7.4"
+   const val core = "com.russhwolf:multiplatform-settings:$version"
+}
+
 object Coroutines {
-    private const val version = "1.4.2"
+    private const val version = "1.4.2-native-mt"
 
     const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
     const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
+    const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
 }
 
 object SqlDelight {
@@ -93,8 +104,24 @@ object Serialization {
     const val core = "org.jetbrains.kotlinx:kotlinx-serialization-core:$version"
 }
 
-object Test {
-    const val junit = "junit:junit:4.13.1"
+object KotlinTest {
+    const val jvm = "org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}"
+    const val junit = "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin}"
+}
+
+object AndroidXTest {
+    private const val version = "1.3.0"
+    private const val testExtVersion = "1.1.2"
+
+    const val core = "androidx.test:core:$version"
+    const val junit = "androidx.test.ext:junit:$testExtVersion"
+    const val runner = "androidx.test:runner:$version"
+    const val rules = "androidx.test:rules:$version"
+}
+
+object Robolectric {
+    private const val version = "4.5.1"
+    val core = "org.robolectric:robolectric:$version"
 }
 
 object Coil {

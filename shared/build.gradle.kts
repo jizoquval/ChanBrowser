@@ -59,61 +59,54 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(SqlDelight.runtime)
-                implementation(SqlDelight.coroutinesExtensions)
-                implementation(Coroutines.core)
-                implementation(Serialization.core)
-                implementation(Ktor.core)
-                implementation(Ktor.serialization)
-                implementation(Ktor.logger)
-                implementation(Ktor.loggerLogback)
-                implementation(Koin.core)
-                implementation(Mvi.core)
-                implementation(Mvi.defaultStorageFactory)
-                implementation(Mvi.coroutineExt)
-                implementation(Mvi.rx)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val androidMain by getting {
-            dependencies {
-                implementation(Jetpack.ViewModel.compose)
-                implementation(SqlDelight.androidDriver)
-                implementation(Ktor.android)
-            }
-        }
-        val androidTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation(Test.junit)
-            }
-        }
-        val iosMain by getting {
-            dependencies {
-                implementation(SqlDelight.nativeDriver)
-                implementation(Ktor.ios)
+        all {
+            languageSettings.apply {
+                useExperimentalAnnotation("kotlin.RequiresOptIn")
+                useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             }
         }
     }
-}
 
-android {
-    compileSdkVersion(Versions.compile)
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    sourceSets["commonMain"].dependencies {
+        implementation(SqlDelight.runtime)
+        implementation(SqlDelight.coroutinesExtensions)
+        implementation(Coroutines.core)
+        implementation(Serialization.core)
+        implementation(Ktor.core)
+        implementation(Ktor.serialization)
+        implementation(Ktor.logger)
+        api(Koin.core)
+        implementation(Mvi.core)
+        implementation(Mvi.defaultStorageFactory)
+        implementation(Mvi.coroutineExt)
+        implementation(Mvi.rx)
+        implementation(PlatformSettings.core)
+        api(Kermit.core)
     }
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
+    sourceSets["commonTest"].dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+    }
+    sourceSets["androidMain"].dependencies {
+        implementation(Jetpack.ViewModel.compose)
+        implementation(SqlDelight.androidDriver)
+        implementation(Ktor.android)
+    }
+    sourceSets["androidTest"].dependencies {
+        implementation(KotlinTest.jvm)
+        implementation(KotlinTest.junit)
+        implementation(Coroutines.test)
+
+        implementation(AndroidXTest.core)
+        implementation(AndroidXTest.junit)
+        implementation(AndroidXTest.runner)
+        implementation(AndroidXTest.rules)
+
+        implementation(Robolectric.core)
+    }
+    sourceSets["iosMain"].dependencies {
+        implementation(SqlDelight.nativeDriver)
+        implementation(Ktor.ios)
     }
 }
 

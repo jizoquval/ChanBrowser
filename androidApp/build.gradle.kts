@@ -16,7 +16,6 @@ dependencies {
 
     implementation(Coil.core)
 
-    implementation(Koin.core)
     implementation(Koin.viewModel)
     implementation(Koin.compose)
 
