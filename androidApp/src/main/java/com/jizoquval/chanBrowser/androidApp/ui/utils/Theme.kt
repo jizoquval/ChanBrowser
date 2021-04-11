@@ -7,7 +7,6 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// TODO ADD COlORS
 private val DarkColorPalette = darkColors(
     primary = yellow500,
     primaryVariant = yellow800,
@@ -17,21 +16,26 @@ private val DarkColorPalette = darkColors(
     secondaryVariant = Color.Cyan,
     onSecondary = Color.White,
 
-    background = darkGrayBG,
+    background = darkGray,
     onBackground = Color.White,
 
     surface = ashGray,
     onSurface = lightGray
-    // surface = darkGrayBG,
-    // background = darkGrayBG,
 )
 
 private val LightColorPalette = lightColors(
     primary = yellow500,
     primaryVariant = yellow800,
+    onPrimary = darkGray,
+
     secondary = gray800,
-    onPrimary = Color.Black,
-    onSurface = Color.Black
+    onSecondary = darkGray,
+
+    background = Color.White,
+    onBackground = darkGray,
+
+    surface = ltSurfaceWhite,
+    onSurface = ltOnSurfaceGray
 )
 
 @Composable
