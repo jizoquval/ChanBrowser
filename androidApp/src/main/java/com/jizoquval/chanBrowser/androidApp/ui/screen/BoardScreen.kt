@@ -3,6 +3,7 @@ package com.jizoquval.chanBrowser.androidApp.ui.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -53,6 +54,7 @@ fun BoardScreen(
                 Modifier
                     .padding(innerPadding)
                     .padding(horizontal = 12.dp)
+                    .padding(top = 8.dp)
             ) {
                 ThreadList(state.value.threadList)
             }
@@ -62,7 +64,11 @@ fun BoardScreen(
 
 @Composable
 private fun ThreadList(list: List<BoardModel.Thread>) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
         items(items = list) {
             Thread(
                 title = it.title,
@@ -90,7 +96,8 @@ private fun Thread(
     image: @Composable () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().height(113.dp),
+        modifier = Modifier.fillMaxWidth(0.98f).height(113.dp),
+        elevation = 4.dp
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),

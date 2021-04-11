@@ -1,6 +1,7 @@
 package com.jizoquval.chanBrowser.androidApp.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -98,7 +99,7 @@ private fun Favorites(
     Column {
         Text(
             text = stringResource(R.string.favorites),
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.h2,
             modifier = Modifier.padding(bottom = 12.dp)
         )
         LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -118,15 +119,18 @@ private fun Boards(
     Column {
         Text(
             text = stringResource(R.string.boards),
-            style = MaterialTheme.typography.h3,
-            modifier = Modifier.padding(vertical = 16.dp)
+            style = MaterialTheme.typography.h2,
         )
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
             boardsCategories.forEach { (category, boardsList) ->
                 stickyHeader {
                     Card(
                         modifier = Modifier.fillMaxWidth().height(33.dp),
-                        elevation = 5.dp,
+                        elevation = 0.dp,
                         shape = MaterialTheme.shapes.large,
                         backgroundColor = MaterialTheme.colors.background
                     ) {
@@ -177,8 +181,9 @@ private fun BoardCardLong(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { toBoard(board.name) }
+            .fillMaxWidth(0.98f)
+            .clickable { toBoard(board.name) },
+        elevation = 4.dp,
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
@@ -188,7 +193,7 @@ private fun BoardCardLong(
                 style = MaterialTheme.typography.h3,
                 color = MaterialTheme.colors.primary,
             )
-            Text(text = board.description, color = MaterialTheme.colors.onSurface)
+            Text(text = board.description)
         }
     }
 }
@@ -200,7 +205,7 @@ private fun TopBar(selectedApp: String, toSettings: () -> Unit) {
             Text(
                 text = selectedApp,
                 color = MaterialTheme.colors.primary,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h2
             )
         },
         backgroundColor = Color.Transparent,
@@ -242,6 +247,9 @@ fun TopBarPreview() {
 @Composable
 fun BoardCardShortPreview() {
     BaseAppTheme(darkTheme = true) {
+        BoardCardShort(board = BoardListModel.Board("ca", "Animals & Nature")) {}
+    }
+    BaseAppTheme(darkTheme = false) {
         BoardCardShort(board = BoardListModel.Board("ca", "Animals & Nature")) {}
     }
 }
