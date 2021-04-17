@@ -6,7 +6,7 @@ CREATE TABLE Board (
     chan TEXT as Chan NOT NULL,
     name TEXT NOT NULL,
     category TEXT NOT NULL,
-    isFavorite INTEGER NOT NULL DEFAULT 0,
+    isFavorite INTEGER AS Boolean NOT NULL DEFAULT 0,
     UNIQUE(idOnChan, chan)
 );
 

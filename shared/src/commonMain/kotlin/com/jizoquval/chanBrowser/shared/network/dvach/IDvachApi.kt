@@ -6,5 +6,5 @@ import com.jizoquval.chanBrowser.shared.network.json.ThreadsListJson
 interface IDvachApi {
 
     suspend fun getBoards(): Map<String, List<BoardJson>>
-    suspend fun getThreads(boardName: String): ThreadsListJson
+    suspend fun getThreads(boardIdOnDvaCh: String): ThreadsListJson
 }

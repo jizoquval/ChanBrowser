@@ -39,12 +39,6 @@ private val coreModule = module {
             BoardAdapter = Board.Adapter(
                 chanAdapter = EnumColumnAdapter()
             ),
-            ThreadAdapter = Thread.Adapter(
-                chanAdapter = EnumColumnAdapter()
-            ),
-            PostAdapter = Post.Adapter(
-                chanAdapter = EnumColumnAdapter()
-            )
         )
     }
     single<IBoardRepository> {
@@ -78,7 +72,7 @@ private val coreModule = module {
             logger = getWith("BoardsListStoreFactory")
         ).create()
     }
-    factory { (boardId: String) ->
+    factory { (boardId: Long) ->
         BoardStoreFactory(
             boardId = boardId,
             storeFactory = DefaultStoreFactory,

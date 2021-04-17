@@ -13,11 +13,13 @@ import com.jizoquval.chanBrowser.shared.cache.ThreadPost
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
 import com.jizoquval.chanBrowser.shared.cache.repository.thread.IThreadRepository
 import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 
 class BoardStoreFactory(
-    private val boardId: String,
+    private val boardId: Long,
     private val storeFactory: StoreFactory,
     private val api: IDvachApi,
     private val db: IThreadRepository,
@@ -26,11 +28,12 @@ class BoardStoreFactory(
 
     private sealed class Action {
         object SubscribeToThreads : Action()
-        object LoadThreads : Action()
+        object LoadThreads: Action()
     }
 
     private sealed class Result {
         data class ThreadsLoaded(val list: List<ThreadPost>) : Result()
+        data class ThreadName(val name: String): Result()
     }
 
     fun create(): BoardStore = object :
@@ -38,7 +41,7 @@ class BoardStoreFactory(
         Store<Intent, State, Label> by storeFactory.create(
             name = "BoardStore",
             initialState = State(
-                boardName = boardId,
+                boardName = "",
                 isProgress = true
             ),
             bootstrapper = BootstrapperImpl(),
@@ -48,18 +51,8 @@ class BoardStoreFactory(
 
     private inner class BootstrapperImpl : SuspendBootstrapper<Action>() {
         override suspend fun bootstrap() {
-            loadAndSaveThreads()
             dispatch(Action.SubscribeToThreads)
-        }
-
-        private suspend fun loadAndSaveThreads() {
-            try {
-                // todo for current chan
-                val response = api.getThreads(boardId)
-                db.insert(chan = Chan.DvaCh, boardId = boardId, threadJson = response)
-            } catch (ex: Exception) {
-                logger.e { "Get api exception: $ex" }
-            }
+            dispatch(Action.LoadThreads)
         }
     }
 
@@ -67,15 +60,23 @@ class BoardStoreFactory(
 
         override suspend fun executeAction(action: Action, getState: () -> State) =
             when (action) {
-                Action.SubscribeToThreads -> {
+                is Action.SubscribeToThreads -> {
                     db.selectThreads(
-                        chan = Chan.DvaCh,
                         boardId = boardId,
                     ).collect {
                         dispatch(Result.ThreadsLoaded(it))
                     }
                 }
                 is Action.LoadThreads -> {
+                    try {
+                        val boardIdOnChan = db.selectBoardIdOnChan(boardId)
+                        dispatch(Result.ThreadName(boardIdOnChan))
+
+                        val response = api.getThreads(boardIdOnChan)
+                        db.insert(boardId = boardId, threadJson = response)
+                    } catch (ex: Exception) {
+                        logger.e { "Get api exception: $ex" }
+                    }
                 }
             }
 
@@ -96,6 +97,13 @@ class BoardStoreFactory(
                         boardName = boardName,
                         isProgress = false,
                         threads = result.list
+                    )
+                }
+                is Result.ThreadName -> {
+                    State(
+                        boardName = result.name,
+                        isProgress = isProgress,
+                        threads = threads
                     )
                 }
             }

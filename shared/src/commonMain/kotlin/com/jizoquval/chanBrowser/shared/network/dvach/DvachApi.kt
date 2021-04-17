@@ -25,11 +25,11 @@ internal class DvachApi(
             }
         }
 
-    override suspend fun getThreads(boardName: String): ThreadsListJson =
+    override suspend fun getThreads(boardIdOnDvaCh: String): ThreadsListJson =
         withContext(backgroundDispatcher) {
             httpClient.get {
                 url {
-                    encodedPath = "$boardName/catalog.json"
+                    encodedPath = "$boardIdOnDvaCh/catalog.json"
                 }
             }
         }

@@ -40,15 +40,15 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun BoardScreen(
-    boardId: String,
-    toThread: (String) -> Unit,
+    boardId: Long,
+    toThread: (Long) -> Unit,
     pressUp: () -> Unit,
     boardViewModel: BoardViewModel = getViewModel(parameters = { parametersOf(boardId) })
 ) {
     val state = boardViewModel.state.collectAsState()
     BaseAppTheme {
         Scaffold(
-            topBar = { TopBar(threadName = boardId, onBackClick = pressUp) }
+            topBar = { TopBar(threadName = state.value.boardName, onBackClick = pressUp) }
         ) { innerPadding ->
             Column(
                 Modifier

@@ -8,6 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface IBoardRepository {
 
     suspend fun insetBoards(chan: Chan, boards: List<BoardJson>)
-
     fun selectAllBoardsFor(chan: Chan): Flow<List<Board>>
 }

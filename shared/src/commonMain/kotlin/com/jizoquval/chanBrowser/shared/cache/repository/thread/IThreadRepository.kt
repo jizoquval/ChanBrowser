@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IThreadRepository {
 
-    suspend fun insert(chan: Chan, boardId: String, threadJson: ThreadsListJson)
-    fun selectThreads(chan: Chan, boardId: String, offset: Long, rowCount: Long): Flow<List<Thread>>
-    fun selectThreads(chan: Chan, boardId: String): Flow<List<ThreadPost>>
+    suspend fun insert(boardId: Long, threadJson: ThreadsListJson)
+    suspend fun selectBoardIdOnChan(boardId: Long): String
+    fun selectThreads(boardId: Long, offset: Long, rowCount: Long): Flow<List<Thread>>
+    fun selectThreads(boardId: Long): Flow<List<ThreadPost>>
 }

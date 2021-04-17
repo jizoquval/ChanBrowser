@@ -7,8 +7,8 @@ import com.jizoquval.chanBrowser.shared.cache.models.Chan
 interface BoardsListStore : Store<BoardsListStore.Intent, BoardsListStore.State, BoardsListStore.Label> {
 
     sealed class Intent {
-        class SelectFavorite(val id: String) : Intent()
-        class BoardSelected(val id: String) : Intent()
+        class SelectFavorite(val id: Long) : Intent()
+        class BoardSelected(val id: Long) : Intent()
         object SettingsSelected : Intent()
     }
 
@@ -21,7 +21,7 @@ interface BoardsListStore : Store<BoardsListStore.Intent, BoardsListStore.State,
     )
 
     sealed class Label {
-        class NavigateToThread(val boardId: String) : Label()
+        class NavigateToThread(val boardId: Long) : Label()
         object NavigateToSettings : Label()
     }
 }

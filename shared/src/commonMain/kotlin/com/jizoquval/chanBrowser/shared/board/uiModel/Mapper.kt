@@ -8,7 +8,7 @@ fun stateToModel(state: BoardStore.State): BoardModel {
         isProgress = state.isProgress,
         threadList = state.threads.map { thread ->
             BoardModel.Thread(
-                id = thread.threadId,
+                id = thread.idOnChan,
                 title = thread.title,
                 message = thread.message,
                 postsCount = thread.postsCount,
