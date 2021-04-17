@@ -8,15 +8,12 @@ import com.arkivanov.mvikotlin.extensions.coroutines.SuspendBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.SuspendExecutor
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
-import com.jizoquval.chanBrowser.shared.cache.repository.board.IBoardRepository
-import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
 import kotlinx.coroutines.flow.collect
 import org.koin.core.component.KoinComponent
 
 class BoardsListStoreFactory(
+    private val repository: ChanBoardsRepository,
     private val storeFactory: StoreFactory,
-    private val api: IDvachApi,
-    private val db: IBoardRepository,
     private val logger: Kermit
 ) : KoinComponent {
 
@@ -48,15 +45,15 @@ class BoardsListStoreFactory(
 
     private inner class ExecutorImpl :
         SuspendExecutor<BoardsListStore.Intent,
-            Action,
-            BoardsListStore.State,
-            Result,
-            BoardsListStore.Label>() {
+                Action,
+                BoardsListStore.State,
+                Result,
+                BoardsListStore.Label>() {
 
         override suspend fun executeAction(action: Action, getState: () -> BoardsListStore.State) =
             when (action) {
                 Action.SubscribeToBoards -> {
-                    db.selectAllBoardsFor(getState().chan).collect { list ->
+                    repository.subscribeToBoards().collect { list ->
                         dispatch(Result.BoardsList(list))
                     }
                 }
@@ -69,6 +66,8 @@ class BoardsListStoreFactory(
         ) = when (intent) {
             is BoardsListStore.Intent.SelectFavorite -> {
                 logger.d { "Favorite board selected: ${intent.id}" }
+                // TODO change to opposite value
+                repository.setFavorite(boardId = intent.id, true)
             }
             is BoardsListStore.Intent.BoardSelected -> {
                 logger.d { "Board selected: ${intent.id}" }
@@ -84,14 +83,8 @@ class BoardsListStoreFactory(
     private inner class BootstrapperImpl : SuspendBootstrapper<Action>() {
         override suspend fun bootstrap() {
             dispatch(Action.SubscribeToBoards)
-            loadAndSaveBoards()
-        }
-
-        private suspend fun loadAndSaveBoards() {
-            // todo for current chan
             try {
-                val response = api.getBoards()
-                db.insetBoards(Chan.DvaCh, response.values.flatten())
+                repository.loadBoards()
             } catch (ex: Exception) {
                 dispatch(Action.CantUpdateBoards)
             }

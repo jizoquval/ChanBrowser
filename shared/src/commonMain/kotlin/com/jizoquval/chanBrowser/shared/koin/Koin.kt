@@ -3,6 +3,8 @@ package com.jizoquval.chanBrowser.shared.koin
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.jizoquval.chanBrowser.shared.board.BoardStoreFactory
 import com.jizoquval.chanBrowser.shared.boardsList.BoardsListStoreFactory
+import com.jizoquval.chanBrowser.shared.boardsList.ChanBoardsRepository
+import com.jizoquval.chanBrowser.shared.boardsList.dvaCh.DvaChBoardsRepository
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.repository.board.BoardRepository
@@ -62,11 +64,16 @@ private val coreModule = module {
     single<IDvachApi> {
         DvachApi(get(named(Endpoint.DvaCh)), get(named("ioDispatcher")))
     }
+    single<ChanBoardsRepository> {
+        DvaChBoardsRepository(
+            api = get(),
+            db = get()
+        )
+    }
     factory {
         BoardsListStoreFactory(
             storeFactory = DefaultStoreFactory,
-            api = get(),
-            db = get(),
+            repository = get(),
             logger = getWith("BoardsListStoreFactory")
         ).create()
     }
