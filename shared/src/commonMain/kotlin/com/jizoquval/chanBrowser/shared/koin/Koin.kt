@@ -5,8 +5,6 @@ import com.jizoquval.chanBrowser.shared.board.BoardStoreFactory
 import com.jizoquval.chanBrowser.shared.boardsList.BoardsListStoreFactory
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Board
-import com.jizoquval.chanBrowser.shared.cache.Post
-import com.jizoquval.chanBrowser.shared.cache.Thread
 import com.jizoquval.chanBrowser.shared.cache.repository.board.BoardRepository
 import com.jizoquval.chanBrowser.shared.cache.repository.board.IBoardRepository
 import com.jizoquval.chanBrowser.shared.cache.repository.thread.IThreadRepository

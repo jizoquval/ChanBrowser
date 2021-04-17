@@ -10,12 +10,9 @@ import com.jizoquval.chanBrowser.shared.board.BoardStore.Intent
 import com.jizoquval.chanBrowser.shared.board.BoardStore.Label
 import com.jizoquval.chanBrowser.shared.board.BoardStore.State
 import com.jizoquval.chanBrowser.shared.cache.ThreadPost
-import com.jizoquval.chanBrowser.shared.cache.models.Chan
 import com.jizoquval.chanBrowser.shared.cache.repository.thread.IThreadRepository
 import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 
 class BoardStoreFactory(
@@ -28,12 +25,12 @@ class BoardStoreFactory(
 
     private sealed class Action {
         object SubscribeToThreads : Action()
-        object LoadThreads: Action()
+        object LoadThreads : Action()
     }
 
     private sealed class Result {
         data class ThreadsLoaded(val list: List<ThreadPost>) : Result()
-        data class ThreadName(val name: String): Result()
+        data class ThreadName(val name: String) : Result()
     }
 
     fun create(): BoardStore = object :

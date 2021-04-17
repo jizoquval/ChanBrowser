@@ -231,7 +231,7 @@ private fun TopBar(selectedApp: String, toSettings: () -> Unit) {
 @Composable
 fun BoardCardLongPreview() {
     BaseAppTheme(darkTheme = true) {
-        BoardCardLong(board = BoardListModel.Board(0,"ca", "Animals & Nature")) {}
+        BoardCardLong(board = BoardListModel.Board(0, "ca", "Animals & Nature")) {}
     }
 }
 
@@ -247,9 +247,9 @@ fun TopBarPreview() {
 @Composable
 fun BoardCardShortPreview() {
     BaseAppTheme(darkTheme = true) {
-        BoardCardShort(board = BoardListModel.Board(0,"ca", "Animals & Nature")) {}
+        BoardCardShort(board = BoardListModel.Board(0, "ca", "Animals & Nature")) {}
     }
     BaseAppTheme(darkTheme = false) {
-        BoardCardShort(board = BoardListModel.Board(0,"ca", "Animals & Nature")) {}
+        BoardCardShort(board = BoardListModel.Board(0, "ca", "Animals & Nature")) {}
     }
 }
