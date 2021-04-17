@@ -1,21 +1,31 @@
 import com.jizoquval.chanBrowser.shared.cache.models.Chan;
 
 CREATE TABLE Board (
-    id TEXT NOT NULL,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    idOnChan TEXT NOT NULL,
     chan TEXT as Chan NOT NULL,
     name TEXT NOT NULL,
     category TEXT NOT NULL,
-    defaultName TEXT NOT NULL,
-    isFavorite INTEGER AS Boolean NOT NULL DEFAULT 0,
-    PRIMARY KEY(chan, id)
+    isFavorite INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(idOnChan, chan)
 );
 
-putBoard:
-INSERT OR REPLACE INTO Board (chan, id, defaultName, name, category, isFavorite)
-VALUES (?, ?, ?, ?, ?, COALESCE((SELECT isFavorite FROM Board WHERE id = id AND chan = chan), 0));
+insertBoard:
+INSERT OR IGNORE INTO Board(idOnChan, chan, name, category)
+VALUES(?, ?, ?, ?);
+
+updateBoard:
+UPDATE Board
+SET name = ?, category = ?
+WHERE chan = ? AND idOnChan = ?;
+
+setIsFavorite:
+UPDATE Board
+SET isFavorite = ?
+WHERE id = ? ;
 
 selectAllForChan:
 SELECT * FROM Board WHERE chan = ?;
 
 deleteBoard:
-DELETE FROM Board WHERE chan = ? AND id = ?;
+DELETE FROM Board WHERE id = ?;
