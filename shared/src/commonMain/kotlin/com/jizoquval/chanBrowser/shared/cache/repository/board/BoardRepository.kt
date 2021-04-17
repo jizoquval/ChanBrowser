@@ -25,19 +25,30 @@ class BoardRepository(
             afterCommit {
                 logger.d { "Insert ${boards.size} boards to database" }
             }
-            boards.forEach { v ->
-                dbQuery.putBoard(
-                    chan = chan,
-                    id = v.id,
-                    defaultName = v.defaultName,
-                    name = v.name,
-                    category = v.category,
-                )
+            boards.forEach { json ->
+                updateOrInsert(chan, json)
             }
         }
     }
 
     override fun selectAllBoardsFor(chan: Chan): Flow<List<Board>> {
         return dbQuery.selectAllForChan(chan).asFlow().mapToList().flowOn(backgroundDispatcher)
+    }
+
+    private fun updateOrInsert(chan: Chan, json: BoardJson) {
+        dbQuery.transaction {
+            dbQuery.updateBoard(
+                name = json.name,
+                category = json.category,
+                chan = chan,
+                idOnChan = json.id
+            )
+            dbQuery.insertBoard(
+                idOnChan = json.id,
+                chan = chan,
+                name = json.name,
+                category = json.category
+            )
+        }
     }
 }

@@ -41,16 +41,16 @@ fun NavGraph() {
         }
         composable(
             "${Routes.board}/{${Routes.boardId}}",
-            arguments = listOf(navArgument(Routes.boardId) { type = NavType.StringType })
+            arguments = listOf(navArgument(Routes.boardId) { type = NavType.LongType })
         ) { backStackEntry ->
-            val boardId = checkNotNull(backStackEntry.arguments?.getString(Routes.boardId)) {
+            val boardId = checkNotNull(backStackEntry.arguments?.getLong(Routes.boardId)) {
                 "board id not passed to board screen"
             }
             BoardScreen(boardId = boardId, toThread = actions.toThread, pressUp = actions.upPress)
         }
         composable(
             "${Routes.thread}/{${Routes.threadId}}",
-            arguments = listOf(navArgument(Routes.threadId) { type = NavType.StringType })
+            arguments = listOf(navArgument(Routes.threadId) { type = NavType.LongType })
         ) { backStackEntry ->
             val threadId = checkNotNull(backStackEntry.arguments?.getString(Routes.threadId)) {
                 "thread id not passed to board screen"
@@ -65,11 +65,11 @@ fun NavGraph() {
  */
 class NavigationActions(navController: NavHostController) {
 
-    val toBoard: (String) -> Unit = { boardId ->
+    val toBoard: (Long) -> Unit = { boardId ->
         Log.d("Navigation", "navigate to board: $boardId")
         navController.navigate("${Routes.board}/$boardId")
     }
-    val toThread: (String) -> Unit = { threadId ->
+    val toThread: (Long) -> Unit = { threadId ->
         Log.d("Navigation", "navigate to thread: $threadId")
         navController.navigate("${Routes.thread}/$threadId")
     }

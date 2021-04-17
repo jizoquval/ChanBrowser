@@ -23,7 +23,7 @@ class BoardsApp : Application() {
                 viewModel {
                     BoardsListViewModel(get())
                 }
-                viewModel { (boardId: String) ->
+                viewModel { (boardId: Long) ->
                     BoardViewModel(get { parametersOf(boardId) })
                 }
             }

@@ -1,10 +1,8 @@
-import com.jizoquval.chanBrowser.shared.cache.models.Chan;
-
 CREATE TABLE Post(
-    -- For first post id == threadId
-    id INTEGER NOT NULL,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- For first post idOnChan == threadId
+    idOnChan INTEGER NOT NULL,
     threadId INTEGER NOT NULL,
-    chan TEXT as Chan NOT NULL,
     title TEXT NOT NULL,
     message TEXT NOT NULL,
     date TEXT NOT NULL,
@@ -15,13 +13,22 @@ CREATE TABLE Post(
     email TEXT,
     likes INTEGER AS Int DEFAULT NULL,
     dislikes INTEGER AS Int DEFAULT NULL,
-     PRIMARY KEY(chan, id),
-        FOREIGN KEY(chan, threadId) REFERENCES Thread(chan, id)
-            ON DELETE CASCADE
+    UNIQUE(idOnChan, threadId),
+    FOREIGN KEY(threadId) REFERENCES Thread(id)
+        ON DELETE CASCADE
 );
 
-putPost:
-REPLACE INTO Post VALUES ?;
+insertPost:
+INSERT OR IGNORE INTO Post(
+    idOnChan, threadId, title, message, date, timestamp, isOP, isStiky, name, email, likes, dislikes
+)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updatePost:
+UPDATE Post
+SET title = ?, message = ?, date = ?, timestamp = ?,
+    isOP = ?, isStiky = ?, name = ?, email = ?, likes = ?, dislikes = ?
+WHERE threadId = ? AND idOnChan = ?;
 
 selectPostsForThread:
-SELECT * FROM Post WHERE chan = ? AND threadId = ?;
+SELECT * FROM Post WHERE threadId = ?;

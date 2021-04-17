@@ -48,12 +48,12 @@ import org.koin.androidx.compose.getViewModel
 @ExperimentalCoroutinesApi
 @Composable
 fun BoardsListScreen(
-    toBoard: (String) -> Unit,
+    toBoard: (Long) -> Unit,
     toSettings: () -> Unit,
     boardsListViewModel: BoardsListViewModel = getViewModel()
 ) {
     val state = boardsListViewModel.state.collectAsState()
-    val onBoardSelect = { board: String ->
+    val onBoardSelect = { board: Long ->
         boardsListViewModel.dispatch(BoardListEvent.SelectBoard(board))
     }
     val scope = rememberCoroutineScope()
@@ -94,7 +94,7 @@ fun BoardsListScreen(
 @Composable
 private fun Favorites(
     favoritesBoards: List<BoardListModel.Board>,
-    toBoard: (String) -> Unit
+    toBoard: (Long) -> Unit
 ) {
     Column {
         Text(
@@ -114,7 +114,7 @@ private fun Favorites(
 @Composable
 private fun Boards(
     boardsCategories: Map<String, List<BoardListModel.Board>>,
-    toBoard: (String) -> Unit
+    toBoard: (Long) -> Unit
 ) {
     Column {
         Text(
@@ -152,13 +152,13 @@ private fun Boards(
 @Composable
 private fun BoardCardShort(
     board: BoardListModel.Board,
-    toBoard: (String) -> Unit
+    toBoard: (Long) -> Unit
 ) {
     Card(
         modifier = Modifier
             .width(80.dp)
             .height(80.dp)
-            .clickable { toBoard(board.name) }
+            .clickable { toBoard(board.id) }
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -177,12 +177,12 @@ private fun BoardCardShort(
 @Composable
 private fun BoardCardLong(
     board: BoardListModel.Board,
-    toBoard: (String) -> Unit
+    toBoard: (Long) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth(0.98f)
-            .clickable { toBoard(board.name) },
+            .clickable { toBoard(board.id) },
         elevation = 4.dp,
     ) {
         Column(
@@ -231,7 +231,7 @@ private fun TopBar(selectedApp: String, toSettings: () -> Unit) {
 @Composable
 fun BoardCardLongPreview() {
     BaseAppTheme(darkTheme = true) {
-        BoardCardLong(board = BoardListModel.Board("ca", "Animals & Nature")) {}
+        BoardCardLong(board = BoardListModel.Board(0, "ca", "Animals & Nature")) {}
     }
 }
 
@@ -247,9 +247,9 @@ fun TopBarPreview() {
 @Composable
 fun BoardCardShortPreview() {
     BaseAppTheme(darkTheme = true) {
-        BoardCardShort(board = BoardListModel.Board("ca", "Animals & Nature")) {}
+        BoardCardShort(board = BoardListModel.Board(0, "ca", "Animals & Nature")) {}
     }
     BaseAppTheme(darkTheme = false) {
-        BoardCardShort(board = BoardListModel.Board("ca", "Animals & Nature")) {}
+        BoardCardShort(board = BoardListModel.Board(0, "ca", "Animals & Nature")) {}
     }
 }

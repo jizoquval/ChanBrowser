@@ -1,32 +1,46 @@
-import com.jizoquval.chanBrowser.shared.cache.models.Chan;
-
 CREATE TABLE Thread (
-    id INTEGER NOT NULL,
-    chan TEXT AS Chan NOT NULL,
-    boardId TEXT NOT NULL,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    idOnChan INTEGER NOT NULL,
+    boardId INTEGER NOT NULL,
     postMessageLength INTEGER AS Int NOT NULL,
     postsCount INTEGER AS Int NOT NULL,
     filesCount INTEGER AS Int NOT NULL,
+    timestamp INTEGER NOT NULL,
     isEndless INTEGER AS Boolean NOT NULL DEFAULT 0,
     isArchive INTEGER AS Boolean NOT NULL DEFAULT 0,
     isClosed  INTEGER AS Boolean NOT NULL DEFAULT 0,
-    timestamp INTEGER NOT NULL,
-    PRIMARY KEY(chan, id),
-    FOREIGN KEY(chan, boardId) REFERENCES Board(chan, id)
-        ON DELETE CASCADE
+    FOREIGN KEY(boardId) REFERENCES Board(id)
+        ON DELETE CASCADE,
+     UNIQUE (idOnChan, boardId)
 );
 
 CREATE VIEW threadPost
-AS SELECT Thread.chan, Thread.boardId, Thread.id AS threadId, Thread.postsCount, Thread.filesCount, Post.title, Post.message
+AS SELECT Thread.id, Thread.idOnChan, Thread.boardId, Thread.postsCount, Thread.filesCount, Post.title, Post.message
 FROM Thread
-INNER JOIN Post ON Post.threadId = Thread.id AND Post.chan = Thread.chan
-WHERE Thread.id = Post.id;
+INNER JOIN Post ON Post.threadId = Thread.id
+WHERE Post.idOnChan = Thread.idOnChan;
 
-putThread:
-REPLACE INTO Thread VALUES ?;
+insertThread:
+INSERT OR IGNORE INTO Thread(
+    idOnChan, boardId, postMessageLength, postsCount, filesCount,
+    timestamp, isEndless, isArchive, isClosed
+)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateThread:
+UPDATE Thread
+SET postMessageLength = ?, postsCount = ?, filesCount = ?, timestamp = ?,
+    isEndless = ?, isArchive = ?, isClosed = ?
+WHERE boardId = ? AND idOnChan = ?;
 
 selectThreadsForBoard:
-SELECT * FROM Thread WHERE chan = ? AND boardId = ? LIMIT :offset, :rowCount;
+SELECT * FROM Thread WHERE boardId = ? LIMIT :offset, :rowCount;
 
 selectAllThreadsForBoard:
-SELECT * FROM threadPost WHERE threadPost.chan = ? AND threadPost.boardId = ?;
+SELECT * FROM threadPost WHERE threadPost.boardId = ?;
+
+selectThreadId:
+SELECT id FROM Thread WHERE boardId = ? AND idOnChan = ?;
+
+selectBoardName:
+SELECT idOnChan FROM Board WHERE id = ?;

@@ -7,7 +7,8 @@ fun stateToModel(state: BoardsListStore.State): BoardListModel {
     val categories = state.boards?.map { it.category }?.toSet()?.map { cName ->
         cName to state.boards.filter { it.category == cName }.map { board ->
             BoardListModel.Board(
-                name = board.id,
+                id = board.id,
+                name = board.idOnChan,
                 description = board.name
             )
         }
@@ -15,7 +16,8 @@ fun stateToModel(state: BoardsListStore.State): BoardListModel {
 
     val favoritesViewModel = state.favorites?.map { model ->
         BoardListModel.Board(
-            name = model.id,
+            id = model.id,
+            name = model.idOnChan,
             description = model.name
         )
     } ?: emptyList()
@@ -35,7 +37,7 @@ fun stateToModel(state: BoardsListStore.State): BoardListModel {
 
 fun eventToIntent(event: BoardListEvent): BoardsListStore.Intent {
     return when (event) {
-        is BoardListEvent.SelectFavoriteBoard -> BoardsListStore.Intent.SelectFavorite(id = event.name)
-        is BoardListEvent.SelectBoard -> BoardsListStore.Intent.BoardSelected(id = event.name)
+        is BoardListEvent.SelectFavoriteBoard -> BoardsListStore.Intent.SelectFavorite(id = event.boardId)
+        is BoardListEvent.SelectBoard -> BoardsListStore.Intent.BoardSelected(id = event.boardId)
     }
 }

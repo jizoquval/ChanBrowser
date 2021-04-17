@@ -7,6 +7,7 @@ data class BoardListModel(
     val isProgress: Boolean
 ) {
     data class Board(
+        val id: Long,
         val name: String,
         val description: String
     )
