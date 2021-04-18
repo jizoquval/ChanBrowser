@@ -16,9 +16,9 @@ data class FileJson(
     @SerialName("height")
     val height: Int,
     @SerialName("thumbnail")
-    val smallFilePath: String?,
+    val smallFilePath: String,
     @SerialName("tn_width")
-    val smallFWidth: Int?,
+    val smallFWidth: Int,
     @SerialName("tn_height")
-    val smallFHeight: Int?
+    val smallFHeight: Int
 )

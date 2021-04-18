@@ -11,5 +11,6 @@ data class PostDto(
     val authorName: String,
     val authorEmail: String,
     val likesCount: Int?,
-    val dislikesCount: Int?
+    val dislikesCount: Int?,
+    val attachments: List<AttachmentDto>
 )

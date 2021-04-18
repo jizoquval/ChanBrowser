@@ -39,19 +39,36 @@ updateOrInsert {
 selectPostsForThread:
 SELECT * FROM Post WHERE threadId = ?;
 
+selectPostId:
+SELECT id FROM Post WHERE idOnChan = ? AND threadId = ?;
+
 --- Attachments
 
 CREATE TABLE Attachment (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     postId INTEGER NOT NULL,
     type TEXT AS Attachment NOT NULL,
-    path TEXT NOT NULL,
+    path TEXT NOT NULL UNIQUE,
     width INTEGER AS Int NOT NULL,
     height INTEGER AS Int NOT NULL,
     isForAdults INTEGER AS Boolean NOT NULL,
-    smallAttachmentPath TEXT,
-    smallWidth INTEGER AS Int,
-    smallHeight INTEGER AS Int,
+    smallAttachmentPath TEXT NOT NULL,
+    smallWidth INTEGER AS Int NOT NULL,
+    smallHeight INTEGER AS Int NOT NULL,
     FOREIGN KEY(postId) REFERENCES Post(id)
         ON DELETE CASCADE
 );
+
+upsertAttachment {
+    UPDATE Attachment
+    SET type = :type, width = :width, height = :height, isForAdults = :isForAdults,
+        smallAttachmentPath = :smallPath, smallWidth = :smallWidth, smallHeight = :smallHeight
+    WHERE path = :path;
+
+    INSERT OR IGNORE INTO Attachment(
+       postId, type, path, width, height, isForAdults, smallAttachmentPath, smallWidth, smallHeight
+    )
+    VALUES(:postId, :type, :path, :width, :height, :isForAdults, :smallPath,
+          :smallWidth, :smallHeight
+    );
+}
