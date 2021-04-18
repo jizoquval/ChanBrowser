@@ -1,3 +1,5 @@
+import com.jizoquval.chanBrowser.shared.cache.models.Attachment;
+
 CREATE TABLE Post(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     -- For first post idOnChan == threadId
@@ -36,3 +38,20 @@ updateOrInsert {
 
 selectPostsForThread:
 SELECT * FROM Post WHERE threadId = ?;
+
+--- Attachments
+
+CREATE TABLE Attachment (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    postId INTEGER NOT NULL,
+    type TEXT AS Attachment NOT NULL,
+    path TEXT NOT NULL,
+    width INTEGER AS Int NOT NULL,
+    height INTEGER AS Int NOT NULL,
+    isForAdults INTEGER AS Boolean NOT NULL,
+    smallAttachmentPath TEXT,
+    smallWidth INTEGER AS Int,
+    smallHeight INTEGER AS Int,
+    FOREIGN KEY(postId) REFERENCES Post(id)
+        ON DELETE CASCADE
+);
