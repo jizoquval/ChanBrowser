@@ -15,11 +15,13 @@ CREATE TABLE Thread (
 );
 
 CREATE VIEW threadPost
-AS SELECT Thread.id, Thread.idOnChan, Thread.boardId, Thread.postsCount, Thread.filesCount, Post.title, Post.message
+AS SELECT Thread.id, Thread.idOnChan, Thread.boardId, Thread.postsCount, Thread.filesCount, Post.title,
+Post.message, Attachment.smallAttachmentPath
 FROM Thread
 INNER JOIN Post ON Post.threadId = Thread.id
-WHERE Post.idOnChan = Thread.idOnChan;
-
+INNER JOIN Attachment ON Attachment.postId = Post.id
+WHERE Post.idOnChan = Thread.idOnChan
+GROUP BY Thread.id;
 
 updateOrInsert {
     UPDATE Thread

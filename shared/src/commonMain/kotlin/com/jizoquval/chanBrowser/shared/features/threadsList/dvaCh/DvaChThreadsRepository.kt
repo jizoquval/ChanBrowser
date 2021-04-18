@@ -7,6 +7,7 @@ import com.jizoquval.chanBrowser.shared.cache.models.AttachmentDto
 import com.jizoquval.chanBrowser.shared.cache.models.PostDto
 import com.jizoquval.chanBrowser.shared.cache.models.ThreadDto
 import com.jizoquval.chanBrowser.shared.features.threadsList.ThreadRepository
+import com.jizoquval.chanBrowser.shared.network.Endpoint
 import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
 import com.jizoquval.chanBrowser.shared.network.dvach.json.FileJson
 import com.jizoquval.chanBrowser.shared.network.dvach.json.ThreadJson
@@ -58,12 +59,12 @@ private fun ThreadJson.toDto(boardId: Long, maxMessageLength: Int) = ThreadDto(
 )
 
 private fun FileJson.toDto() = AttachmentDto(
-    url = path,
+    url = "https://${Endpoint.DvaCh.url}$path",
     type = Attachment.byCode(type),
     isForAdults = isForAdults.toBoolean(),
     width = width,
     height = height,
-    smallFUrl = smallFilePath,
+    smallFUrl = "https://${Endpoint.DvaCh.url}$smallFilePath",
     smallFWidth = smallFWidth,
     smallFHeight = smallFHeight
 )
