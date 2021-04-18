@@ -4,6 +4,7 @@ import co.touchlab.kermit.Kermit
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Thread
 import com.jizoquval.chanBrowser.shared.cache.ThreadPost
+import com.jizoquval.chanBrowser.shared.cache.models.AttachmentDto
 import com.jizoquval.chanBrowser.shared.cache.models.PostDto
 import com.jizoquval.chanBrowser.shared.cache.models.ThreadDto
 import com.jizoquval.chanBrowser.shared.cache.transactionWithContext
@@ -24,13 +25,23 @@ class ThreadDb(
     private val postQuery = database.postQueries
 
     override suspend fun insert(threadsDto: List<ThreadDto>) {
-        threadQueries.transactionWithContext(backgroundDispatcher) {
-            afterCommit {
-                logger.d { "Insert ${threadsDto.size} threads to database" }
-            }
-            threadsDto.forEach { dto ->
+        threadsDto.forEach { dto ->
+            threadQueries.transactionWithContext(backgroundDispatcher) {
+                afterCommit {
+                    logger.d { "Insert ${threadsDto.size} threads to database" }
+                }
                 updateOrInsertThread(dto)
-                updateOrInsertPost(dto.boardId, dto.post)
+
+                val threadId = threadQueries.selectThreadId(
+                    dto.boardId,
+                    dto.post.postChanId
+                ).executeAsOne()
+                updateOrInsertPost(threadId, dto.post)
+
+                val postId = postQuery.selectPostId(dto.post.postChanId, threadId).executeAsOne()
+                dto.post.attachments.forEach {
+                    updateOrInsertAttachment(postId, it)
+                }
             }
         }
     }
@@ -59,6 +70,8 @@ class ThreadDb(
 
     private fun updateOrInsertThread(dto: ThreadDto) {
         threadQueries.updateOrInsert(
+            boardId = dto.boardId,
+            idOnChan = dto.threadChanId,
             maxPostLength = dto.maxMsgLength,
             postsCount = dto.postsCount,
             filesCount = dto.filesCount,
@@ -66,14 +79,13 @@ class ThreadDb(
             isEndless = dto.isEndless,
             isArchive = dto.isArchived,
             isClosed = dto.isClosed,
-            boardId = dto.boardId,
-            idOnChan = dto.threadChanId
         )
     }
 
-    private fun updateOrInsertPost(boardId: Long, dto: PostDto) {
-        val threadId = threadQueries.selectThreadId(boardId, dto.postChanId).executeAsOne()
+    private fun updateOrInsertPost(threadId: Long, dto: PostDto) {
         postQuery.updateOrInsert(
+            threadId = threadId,
+            idOnChan = dto.postChanId,
             title = dto.title,
             message = dto.message,
             date = dto.date,
@@ -84,8 +96,20 @@ class ThreadDb(
             authorEmil = dto.authorEmail,
             likesCount = dto.likesCount,
             dislikesCount = dto.dislikesCount,
-            threadId = threadId,
-            idOnChan = dto.postChanId
+        )
+    }
+
+    private fun updateOrInsertAttachment(postId: Long, dto: AttachmentDto) {
+        postQuery.upsertAttachment(
+            postId = postId,
+            path = dto.url,
+            type = dto.type,
+            width = dto.width,
+            height = dto.height,
+            isForAdults = dto.isForAdults,
+            smallPath = dto.smallFUrl,
+            smallWidth = dto.smallFWidth,
+            smallHeight = dto.smallFHeight,
         )
     }
 }

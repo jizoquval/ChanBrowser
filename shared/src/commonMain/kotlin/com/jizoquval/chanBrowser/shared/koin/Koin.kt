@@ -2,6 +2,7 @@ package com.jizoquval.chanBrowser.shared.koin
 
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
+import com.jizoquval.chanBrowser.shared.cache.Attachment
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.dbWrapper.board.BoardDb
 import com.jizoquval.chanBrowser.shared.cache.dbWrapper.board.IBoardDb
@@ -41,6 +42,9 @@ private val coreModule = module {
             BoardAdapter = Board.Adapter(
                 chanAdapter = EnumColumnAdapter()
             ),
+            AttachmentAdapter = Attachment.Adapter(
+                typeAdapter = EnumColumnAdapter()
+            )
         )
     }
     single<IBoardDb> {

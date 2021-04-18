@@ -10,6 +10,7 @@ fun stateToModel(state: BoardStore.State): BoardModel {
             BoardModel.Thread(
                 id = thread.idOnChan,
                 title = thread.title,
+                imgUrl = thread.smallAttachmentPath,
                 message = thread.message,
                 postsCount = thread.postsCount,
                 filesCount = thread.filesCount

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,9 +78,10 @@ private fun ThreadList(list: List<BoardModel.Thread>) {
                 filesFount = it.filesCount,
                 image = {
                     Img(
-                        img = Img.Remote(url = "https://picsum.photos/200"),
+                        img = Img.Remote(url = it.imgUrl),
                         contentDescription = "Thread image",
-                        modifier = Modifier.clip(MaterialTheme.shapes.medium)
+                        modifier = Modifier.size(85.dp).clip(MaterialTheme.shapes.medium),
+                        contentScale = ContentScale.FillBounds
                     )
                 }
             )

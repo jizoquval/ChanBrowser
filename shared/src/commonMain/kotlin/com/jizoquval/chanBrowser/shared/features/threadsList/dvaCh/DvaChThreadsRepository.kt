@@ -2,10 +2,14 @@ package com.jizoquval.chanBrowser.shared.features.threadsList.dvaCh
 
 import com.jizoquval.chanBrowser.shared.cache.ThreadPost
 import com.jizoquval.chanBrowser.shared.cache.dbWrapper.thread.IThreadDb
+import com.jizoquval.chanBrowser.shared.cache.models.Attachment
+import com.jizoquval.chanBrowser.shared.cache.models.AttachmentDto
 import com.jizoquval.chanBrowser.shared.cache.models.PostDto
 import com.jizoquval.chanBrowser.shared.cache.models.ThreadDto
 import com.jizoquval.chanBrowser.shared.features.threadsList.ThreadRepository
+import com.jizoquval.chanBrowser.shared.network.Endpoint
 import com.jizoquval.chanBrowser.shared.network.dvach.IDvachApi
+import com.jizoquval.chanBrowser.shared.network.dvach.json.FileJson
 import com.jizoquval.chanBrowser.shared.network.dvach.json.ThreadJson
 import com.jizoquval.chanBrowser.shared.utils.toBoolean
 import kotlinx.coroutines.flow.Flow
@@ -49,6 +53,18 @@ private fun ThreadJson.toDto(boardId: Long, maxMessageLength: Int) = ThreadDto(
         authorName = authorName,
         authorEmail = authorEmail,
         likesCount = likes,
-        dislikesCount = dislikes
+        dislikesCount = dislikes,
+        attachments = files.map { it.toDto() }
     )
+)
+
+private fun FileJson.toDto() = AttachmentDto(
+    url = "https://${Endpoint.DvaCh.url}$path",
+    type = Attachment.byCode(type),
+    isForAdults = isForAdults.toBoolean(),
+    width = width,
+    height = height,
+    smallFUrl = "https://${Endpoint.DvaCh.url}$smallFilePath",
+    smallFWidth = smallFWidth,
+    smallFHeight = smallFHeight
 )

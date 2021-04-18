@@ -9,6 +9,7 @@ data class BoardModel(
         val id: Long,
         val title: String,
         val message: String,
+        val imgUrl: String,
         val postsCount: Int,
         val filesCount: Int
     )
