@@ -20,18 +20,22 @@ FROM Thread
 INNER JOIN Post ON Post.threadId = Thread.id
 WHERE Post.idOnChan = Thread.idOnChan;
 
-insertThread:
-INSERT OR IGNORE INTO Thread(
-    idOnChan, boardId, postMessageLength, postsCount, filesCount,
-    timestamp, isEndless, isArchive, isClosed
-)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
 
-updateThread:
-UPDATE Thread
-SET postMessageLength = ?, postsCount = ?, filesCount = ?, timestamp = ?,
-    isEndless = ?, isArchive = ?, isClosed = ?
-WHERE boardId = ? AND idOnChan = ?;
+updateOrInsert {
+    UPDATE Thread
+    SET postMessageLength = :maxPostLength, postsCount = :postsCount, filesCount = :filesCount,
+    timestamp = :timestamp, isEndless = :isEndless, isArchive = :isArchive, isClosed = :isClosed
+    WHERE boardId = :boardId AND idOnChan = :idOnChan;
+
+    INSERT OR IGNORE INTO Thread(
+     idOnChan, boardId, postMessageLength, postsCount, filesCount, timestamp, isEndless,
+     isArchive, isClosed
+    )
+    VALUES(:idOnChan, :boardId, :maxPostLength, :postsCount, :filesCount, :timestamp, :isEndless,
+        :isArchive, :isClosed
+    );
+}
+
 
 selectThreadsForBoard:
 SELECT * FROM Thread WHERE boardId = ? LIMIT :offset, :rowCount;

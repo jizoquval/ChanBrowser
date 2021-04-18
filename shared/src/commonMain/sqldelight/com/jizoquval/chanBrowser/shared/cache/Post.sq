@@ -8,27 +8,31 @@ CREATE TABLE Post(
     date TEXT NOT NULL,
     timestamp INTEGER NOT NULL,
     isOP INTEGER AS Boolean NOT NULL,
-    isStiky INTEGER AS Int NOT NULL,
-    name TEXT NOT NULL,
-    email TEXT,
-    likes INTEGER AS Int DEFAULT NULL,
-    dislikes INTEGER AS Int DEFAULT NULL,
+    isSticky INTEGER AS Int NOT NULL,
+    authorName TEXT NOT NULL,
+    authorEmail TEXT,
+    likesCount INTEGER AS Int DEFAULT NULL,
+    dislikesCount INTEGER AS Int DEFAULT NULL,
     UNIQUE(idOnChan, threadId),
     FOREIGN KEY(threadId) REFERENCES Thread(id)
         ON DELETE CASCADE
 );
 
-insertPost:
-INSERT OR IGNORE INTO Post(
-    idOnChan, threadId, title, message, date, timestamp, isOP, isStiky, name, email, likes, dislikes
-)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+updateOrInsert {
+    UPDATE Post
+    SET title = :title, message = :message, date = :date, timestamp = :timestamp,
+        isOP = :isOp, isSticky = :isSticky, authorName = :authorName, authorEmail = :authorEmil,
+        likesCount = :likesCount, dislikesCount = :dislikesCount
+    WHERE threadId = :threadId AND idOnChan = :idOnChan;
 
-updatePost:
-UPDATE Post
-SET title = ?, message = ?, date = ?, timestamp = ?,
-    isOP = ?, isStiky = ?, name = ?, email = ?, likes = ?, dislikes = ?
-WHERE threadId = ? AND idOnChan = ?;
+    INSERT OR IGNORE INTO Post(
+        idOnChan, threadId, title, message, date, timestamp, isOP, isSticky, authorName, authorEmail,
+        likesCount, dislikesCount
+    )
+    VALUES(:idOnChan, :threadId, :title, :message, :date, :timestamp, :isOp, :isSticky, :authorName,
+        :authorEmil, :likesCount, :dislikesCount
+    );
+}
 
 selectPostsForThread:
 SELECT * FROM Post WHERE threadId = ?;

@@ -5,9 +5,9 @@ import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Board
 import com.jizoquval.chanBrowser.shared.cache.Post
 import com.jizoquval.chanBrowser.shared.cache.Thread
+import com.jizoquval.chanBrowser.shared.cache.dbWrapper.board.BoardDb
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
-import com.jizoquval.chanBrowser.shared.cache.repository.board.BoardRepository
-import com.jizoquval.chanBrowser.shared.network.json.BoardJson
+import com.jizoquval.chanBrowser.shared.network.dvach.json.BoardJson
 import com.jizoquval.chanBrowser.shared.test.BaseTest
 import com.jizoquval.chanBrowser.shared.test.testDbConnection
 import com.squareup.sqldelight.EnumColumnAdapter
@@ -66,11 +66,11 @@ class ThreadsDbTest : BaseTest() {
         enableTrips = 0,
         icons = null
     )
-    private lateinit var repository: BoardRepository
+    private lateinit var repository: BoardDb
 
     @BeforeTest
     fun setup() = runTest {
-        repository = BoardRepository(
+        repository = BoardDb(
             AppDatabase(
                 testDbConnection(),
                 BoardAdapter = Board.Adapter(

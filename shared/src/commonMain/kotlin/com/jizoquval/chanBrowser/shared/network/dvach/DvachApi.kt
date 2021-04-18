@@ -1,7 +1,7 @@
 package com.jizoquval.chanBrowser.shared.network.dvach
 
-import com.jizoquval.chanBrowser.shared.network.json.BoardJson
-import com.jizoquval.chanBrowser.shared.network.json.ThreadsListJson
+import com.jizoquval.chanBrowser.shared.network.dvach.json.BoardJson
+import com.jizoquval.chanBrowser.shared.network.dvach.json.ThreadsListJson
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

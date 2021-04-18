@@ -1,16 +1,18 @@
 package com.jizoquval.chanBrowser.shared.koin
 
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.jizoquval.chanBrowser.shared.board.BoardStoreFactory
-import com.jizoquval.chanBrowser.shared.boardsList.BoardsListStoreFactory
-import com.jizoquval.chanBrowser.shared.boardsList.ChanBoardsRepository
-import com.jizoquval.chanBrowser.shared.boardsList.dvaCh.DvaChBoardsRepository
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Board
-import com.jizoquval.chanBrowser.shared.cache.repository.board.BoardRepository
-import com.jizoquval.chanBrowser.shared.cache.repository.board.IBoardRepository
-import com.jizoquval.chanBrowser.shared.cache.repository.thread.IThreadRepository
-import com.jizoquval.chanBrowser.shared.cache.repository.thread.ThreadRepository
+import com.jizoquval.chanBrowser.shared.cache.dbWrapper.board.BoardDb
+import com.jizoquval.chanBrowser.shared.cache.dbWrapper.board.IBoardDb
+import com.jizoquval.chanBrowser.shared.cache.dbWrapper.thread.IThreadDb
+import com.jizoquval.chanBrowser.shared.cache.dbWrapper.thread.ThreadDb
+import com.jizoquval.chanBrowser.shared.features.boardsList.BoardsListStoreFactory
+import com.jizoquval.chanBrowser.shared.features.boardsList.ChanBoardsRepository
+import com.jizoquval.chanBrowser.shared.features.boardsList.dvaCh.DvaChBoardsRepository
+import com.jizoquval.chanBrowser.shared.features.threadsList.ThreadRepository
+import com.jizoquval.chanBrowser.shared.features.threadsList.ThreadsListStoreFactory
+import com.jizoquval.chanBrowser.shared.features.threadsList.dvaCh.DvaChThreadsRepository
 import com.jizoquval.chanBrowser.shared.network.Endpoint
 import com.jizoquval.chanBrowser.shared.network.createHttpClient
 import com.jizoquval.chanBrowser.shared.network.dvach.DvachApi
@@ -41,15 +43,15 @@ private val coreModule = module {
             ),
         )
     }
-    single<IBoardRepository> {
-        BoardRepository(
+    single<IBoardDb> {
+        BoardDb(
             database = get(),
             logger = getWith("BoardRepository"),
             backgroundDispatcher = get(named("ioDispatcher")),
         )
     }
-    single<IThreadRepository> {
-        ThreadRepository(
+    single<IThreadDb> {
+        ThreadDb(
             database = get(),
             logger = getWith("ThreadRepository"),
             backgroundDispatcher = get(named("ioDispatcher")),
@@ -70,6 +72,12 @@ private val coreModule = module {
             db = get()
         )
     }
+    single<ThreadRepository> {
+        DvaChThreadsRepository(
+            api = get(),
+            db = get()
+        )
+    }
     factory {
         BoardsListStoreFactory(
             storeFactory = DefaultStoreFactory,
@@ -78,11 +86,10 @@ private val coreModule = module {
         ).create()
     }
     factory { (boardId: Long) ->
-        BoardStoreFactory(
+        ThreadsListStoreFactory(
             boardId = boardId,
             storeFactory = DefaultStoreFactory,
-            api = get(),
-            db = get(),
+            repository = get(),
             logger = getWith("BoardStoreFactory")
         ).create()
     }
