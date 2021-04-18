@@ -43,17 +43,11 @@ class BoardDb(
 
     private fun updateOrInsert(dto: BoardDto) {
         dbQuery.transaction {
-            dbQuery.updateBoard(
+            dbQuery.updateOrInsert(
                 name = dto.name,
                 category = dto.category,
                 chan = dto.chan,
                 idOnChan = dto.idOnChan
-            )
-            dbQuery.insertBoard(
-                idOnChan = dto.idOnChan,
-                chan = dto.chan,
-                name = dto.name,
-                category = dto.category
             )
         }
     }
