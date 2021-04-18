@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.jizoquval.chanBrowser.androidApp.R
 import com.jizoquval.chanBrowser.androidApp.ui.components.Img
 import com.jizoquval.chanBrowser.androidApp.ui.utils.BaseAppTheme
-import com.jizoquval.chanBrowser.shared.board.uiModel.BoardModel
+import com.jizoquval.chanBrowser.shared.features.threadsList.model.BoardModel
 import com.jizoquval.chanBrowser.shared.viewModel.BoardViewModel
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf

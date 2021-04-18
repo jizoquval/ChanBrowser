@@ -1,7 +1,6 @@
 package com.jizoquval.chanBrowser.androidApp.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,15 +29,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jizoquval.chanBrowser.androidApp.R
 import com.jizoquval.chanBrowser.androidApp.ui.utils.BaseAppTheme
-import com.jizoquval.chanBrowser.shared.boardsList.BoardsListStore
-import com.jizoquval.chanBrowser.shared.boardsList.model.BoardListEvent
-import com.jizoquval.chanBrowser.shared.boardsList.model.BoardListModel
+import com.jizoquval.chanBrowser.shared.features.boardsList.BoardsListStore
+import com.jizoquval.chanBrowser.shared.features.boardsList.model.BoardListEvent
+import com.jizoquval.chanBrowser.shared.features.boardsList.model.BoardListModel
 import com.jizoquval.chanBrowser.shared.viewModel.BoardsListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -96,16 +96,9 @@ private fun Favorites(
     favoritesBoards: List<BoardListModel.Board>,
     toBoard: (Long) -> Unit
 ) {
-    Column {
-        Text(
-            text = stringResource(R.string.favorites),
-            style = MaterialTheme.typography.h2,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            items(items = favoritesBoards) { board ->
-                BoardCardShort(board = board, toBoard = toBoard)
-            }
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(items = favoritesBoards) { board ->
+            BoardCardShort(board = board, toBoard = toBoard)
         }
     }
 }
@@ -116,34 +109,30 @@ private fun Boards(
     boardsCategories: Map<String, List<BoardListModel.Board>>,
     toBoard: (Long) -> Unit
 ) {
-    Column {
-        Text(
-            text = stringResource(R.string.boards),
-            style = MaterialTheme.typography.h2,
-        )
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            boardsCategories.forEach { (category, boardsList) ->
-                stickyHeader {
-                    Card(
-                        modifier = Modifier.fillMaxWidth().height(33.dp),
-                        elevation = 0.dp,
-                        shape = MaterialTheme.shapes.large,
-                        backgroundColor = MaterialTheme.colors.background
-                    ) {
-                        Text(
-                            text = category,
-                            style = MaterialTheme.typography.h3,
-                            color = MaterialTheme.colors.onSurface,
-                        )
-                    }
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        boardsCategories.forEach { (category, boardsList) ->
+            stickyHeader {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(33.dp),
+                    elevation = 0.dp,
+                    shape = MaterialTheme.shapes.large,
+                    backgroundColor = MaterialTheme.colors.background
+                ) {
+                    Text(
+                        text = category,
+                        style = MaterialTheme.typography.h3,
+                        color = MaterialTheme.colors.onSurface,
+                    )
                 }
-                items(items = boardsList) { board ->
-                    BoardCardLong(board = board, toBoard = toBoard)
-                }
+            }
+            items(items = boardsList) { board ->
+                BoardCardLong(board = board, toBoard = toBoard)
             }
         }
     }
@@ -158,6 +147,7 @@ private fun BoardCardShort(
         modifier = Modifier
             .width(80.dp)
             .height(80.dp)
+            .clip(MaterialTheme.shapes.medium)
             .clickable { toBoard(board.id) }
     ) {
         Box(
@@ -182,6 +172,7 @@ private fun BoardCardLong(
     Card(
         modifier = Modifier
             .fillMaxWidth(0.98f)
+            .clip(MaterialTheme.shapes.medium)
             .clickable { toBoard(board.id) },
         elevation = 4.dp,
     ) {

@@ -1,4 +1,4 @@
-package com.jizoquval.chanBrowser.shared.board.uiModel
+package com.jizoquval.chanBrowser.shared.features.threadsList.model
 
 data class BoardModel(
     val boardName: String,

@@ -10,14 +10,14 @@ CREATE TABLE Board (
     UNIQUE(idOnChan, chan)
 );
 
-insertBoard:
-INSERT OR IGNORE INTO Board(idOnChan, chan, name, category)
-VALUES(?, ?, ?, ?);
+updateOrInsert {
+    UPDATE Board
+    SET name = :name, category = :category
+    WHERE chan = :chan AND idOnChan = :idOnChan;
 
-updateBoard:
-UPDATE Board
-SET name = ?, category = ?
-WHERE chan = ? AND idOnChan = ?;
+    INSERT OR IGNORE INTO Board(idOnChan, chan, name, category)
+    VALUES(:idOnChan, :chan, :name, :category);
+}
 
 setIsFavorite:
 UPDATE Board

@@ -1,4 +1,4 @@
-package com.jizoquval.chanBrowser.shared.boardsList.model
+package com.jizoquval.chanBrowser.shared.features.boardsList.model
 
 sealed class BoardListEvent {
     class SelectFavoriteBoard(val boardId: Long) : BoardListEvent()

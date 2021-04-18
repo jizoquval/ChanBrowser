@@ -1,4 +1,4 @@
-package com.jizoquval.chanBrowser.shared.boardsList
+package com.jizoquval.chanBrowser.shared.features.boardsList
 
 import com.arkivanov.mvikotlin.core.store.Store
 import com.jizoquval.chanBrowser.shared.cache.Board

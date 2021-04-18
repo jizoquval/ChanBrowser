@@ -1,10 +1,10 @@
-package com.jizoquval.chanBrowser.shared.board
+package com.jizoquval.chanBrowser.shared.features.threadsList
 
 import com.arkivanov.mvikotlin.core.store.Store
-import com.jizoquval.chanBrowser.shared.board.BoardStore.Intent
-import com.jizoquval.chanBrowser.shared.board.BoardStore.Label
-import com.jizoquval.chanBrowser.shared.board.BoardStore.State
 import com.jizoquval.chanBrowser.shared.cache.ThreadPost
+import com.jizoquval.chanBrowser.shared.features.threadsList.BoardStore.Intent
+import com.jizoquval.chanBrowser.shared.features.threadsList.BoardStore.Label
+import com.jizoquval.chanBrowser.shared.features.threadsList.BoardStore.State
 
 interface BoardStore : Store<Intent, State, Label> {
 

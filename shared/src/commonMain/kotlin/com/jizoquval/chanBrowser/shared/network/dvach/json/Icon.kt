@@ -1,4 +1,4 @@
-package com.jizoquval.chanBrowser.shared.network.json
+package com.jizoquval.chanBrowser.shared.network.dvach.json
 
 import kotlinx.serialization.Serializable
 

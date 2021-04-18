@@ -1,33 +1,39 @@
-package com.jizoquval.chanBrowser.shared.cache.repository.board
+package com.jizoquval.chanBrowser.shared.cache.dbWrapper.board
 
 import co.touchlab.kermit.Kermit
 import com.jizoquval.chanBrowser.shared.cache.AppDatabase
 import com.jizoquval.chanBrowser.shared.cache.Board
+import com.jizoquval.chanBrowser.shared.cache.models.BoardDto
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
 import com.jizoquval.chanBrowser.shared.cache.transactionWithContext
-import com.jizoquval.chanBrowser.shared.network.json.BoardJson
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 
-class BoardRepository(
-    private val database: AppDatabase,
+class BoardDb(
+    database: AppDatabase,
     private val logger: Kermit,
     private val backgroundDispatcher: CoroutineDispatcher
-) : IBoardRepository {
+) : IBoardDb {
 
     private val dbQuery = database.boardQueries
 
-    override suspend fun insetBoards(chan: Chan, boards: List<BoardJson>) {
-        database.transactionWithContext(backgroundDispatcher) {
+    override suspend fun insetBoards(boards: List<BoardDto>) {
+        dbQuery.transactionWithContext(backgroundDispatcher) {
             afterCommit {
                 logger.d { "Insert ${boards.size} boards to database" }
             }
-            boards.forEach { json ->
-                updateOrInsert(chan, json)
+            boards.forEach { dto ->
+                updateOrInsert(dto)
             }
+        }
+    }
+
+    override suspend fun setIsFavorite(boardId: Long, isFavorite: Boolean) {
+        dbQuery.transactionWithContext(backgroundDispatcher) {
+            dbQuery.setIsFavorite(isFavorite = isFavorite, id = boardId)
         }
     }
 
@@ -35,19 +41,13 @@ class BoardRepository(
         return dbQuery.selectAllForChan(chan).asFlow().mapToList().flowOn(backgroundDispatcher)
     }
 
-    private fun updateOrInsert(chan: Chan, json: BoardJson) {
+    private fun updateOrInsert(dto: BoardDto) {
         dbQuery.transaction {
-            dbQuery.updateBoard(
-                name = json.name,
-                category = json.category,
-                chan = chan,
-                idOnChan = json.id
-            )
-            dbQuery.insertBoard(
-                idOnChan = json.id,
-                chan = chan,
-                name = json.name,
-                category = json.category
+            dbQuery.updateOrInsert(
+                name = dto.name,
+                category = dto.category,
+                chan = dto.chan,
+                idOnChan = dto.idOnChan
             )
         }
     }

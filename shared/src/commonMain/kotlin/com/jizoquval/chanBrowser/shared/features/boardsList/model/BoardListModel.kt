@@ -1,4 +1,4 @@
-package com.jizoquval.chanBrowser.shared.boardsList.model
+package com.jizoquval.chanBrowser.shared.features.boardsList.model
 
 data class BoardListModel(
     val chan: String,

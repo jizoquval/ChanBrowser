@@ -1,8 +1,8 @@
 package com.jizoquval.chanBrowser.shared.viewModel
 
-import com.jizoquval.chanBrowser.shared.board.BoardStore
-import com.jizoquval.chanBrowser.shared.board.uiModel.BoardModel
-import com.jizoquval.chanBrowser.shared.board.uiModel.stateToModel
+import com.jizoquval.chanBrowser.shared.features.threadsList.BoardStore
+import com.jizoquval.chanBrowser.shared.features.threadsList.model.BoardModel
+import com.jizoquval.chanBrowser.shared.features.threadsList.model.stateToModel
 
 class BoardViewModel(
     store: BoardStore

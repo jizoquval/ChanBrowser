@@ -1,7 +1,7 @@
-package com.jizoquval.chanBrowser.shared.boardsList.model
+package com.jizoquval.chanBrowser.shared.features.boardsList.model
 
-import com.jizoquval.chanBrowser.shared.boardsList.BoardsListStore
 import com.jizoquval.chanBrowser.shared.cache.models.Chan
+import com.jizoquval.chanBrowser.shared.features.boardsList.BoardsListStore
 
 fun stateToModel(state: BoardsListStore.State): BoardListModel {
     val categories = state.boards?.map { it.category }?.toSet()?.map { cName ->

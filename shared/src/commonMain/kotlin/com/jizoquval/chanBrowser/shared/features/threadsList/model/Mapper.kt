@@ -1,6 +1,6 @@
-package com.jizoquval.chanBrowser.shared.board.uiModel
+package com.jizoquval.chanBrowser.shared.features.threadsList.model
 
-import com.jizoquval.chanBrowser.shared.board.BoardStore
+import com.jizoquval.chanBrowser.shared.features.threadsList.BoardStore
 
 fun stateToModel(state: BoardStore.State): BoardModel {
     return BoardModel(
