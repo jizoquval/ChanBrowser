@@ -19,7 +19,7 @@ open class BaseDbTest : BaseTest() {
     protected lateinit var threadsDB: ThreadDb
 
     @BeforeTest
-    open fun setup() = runTest {
+    open fun setup() {
         val db = AppDatabase(
             testDbConnection(),
             BoardAdapter = Board.Adapter(
