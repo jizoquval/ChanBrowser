@@ -16,6 +16,8 @@ class BoardsListStoreFactory(
     private val storeFactory: StoreFactory,
     private val logger: Kermit
 ) : KoinComponent {
+    var x = 2
+    var y = 2
 
     private sealed class Action {
         object SubscribeToBoards : Action()

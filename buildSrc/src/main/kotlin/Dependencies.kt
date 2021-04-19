@@ -77,7 +77,7 @@ object Kermit {
 
 object PlatformSettings {
     private const val version = "0.7.4"
-   const val core = "com.russhwolf:multiplatform-settings:$version"
+    const val core = "com.russhwolf:multiplatform-settings:$version"
 }
 
 object Coroutines {
