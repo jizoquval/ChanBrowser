@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
 dependencies {

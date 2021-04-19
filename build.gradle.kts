@@ -23,10 +23,15 @@ allprojects {
     }
 }
 
-ktlint {
-    verbose.set(true)
-    outputToConsole.set(true)
-    filter {
-        exclude("**/generated/**")
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    ktlint {
+        verbose.set(true)
+        outputToConsole.set(true)
+        filter {
+            exclude { tree ->
+                tree.file.path.contains("build/generated")
+            }
+        }
     }
 }
