@@ -13,7 +13,7 @@ import org.koin.core.component.KoinComponent
 
 class BoardsListStoreFactory(
     private val repository: ChanBoardsRepository,
-      private val storeFactory: StoreFactory,
+    private val storeFactory: StoreFactory,
     private val logger: Kermit
 ) : KoinComponent {
     var x = 2
@@ -47,10 +47,10 @@ class BoardsListStoreFactory(
 
     private inner class ExecutorImpl :
         SuspendExecutor<BoardsListStore.Intent,
-                Action,
-                BoardsListStore.State,
-                Result,
-                BoardsListStore.Label>() {
+            Action,
+            BoardsListStore.State,
+            Result,
+            BoardsListStore.Label>() {
 
         override suspend fun executeAction(action: Action, getState: () -> BoardsListStore.State) =
             when (action) {
