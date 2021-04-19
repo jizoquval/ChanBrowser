@@ -16,7 +16,7 @@ object KtLint {
 }
 
 object Ktor {
-    private const val version = "1.5.1"
+    private const val version = "1.5.3"
 
     const val core = "io.ktor:ktor-client-core:$version"
     const val serialization = "io.ktor:ktor-client-serialization:$version"
